@@ -1,0 +1,8 @@
+
+s
+java:S2095&"QUse try-with-resources or close this "CloseableHttpClient" in a "finally" clause.(Ò½™Áşÿÿÿÿ8ÇŞ°ÜÎ1
+
+java:S11496"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(˜İâœÿÿÿÿÿ8ËŞ°ÜÎ1
+L	java:S106="+Replace this use of System.out by a logger.(Ñƒğ¹ÿÿÿÿÿ8ÚŞ°ÜÎ1
+_
+java:S1128"BRemove this unused import 'jakarta.servlet.annotation.WebServlet'.(½¢¢¸8²ü¬²Î1

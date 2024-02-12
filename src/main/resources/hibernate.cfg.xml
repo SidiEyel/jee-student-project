@@ -1,0 +1,32 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC Database connection settings -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/RimBestPrice</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">nabla</property>
+
+        <!-- JDBC connection pool settings ... using built-in test pool -->
+        <property name="hibernate.connection.pool_size">1</property>
+
+        <!-- Select our SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Echo the SQL to stdout -->
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- To create the entities in the db -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Entity classes -->
+        <mapping class="com.rimbestprice.rimbestprice.models.User"/>
+        <mapping class="com.rimbestprice.rimbestprice.models.Flight"/>
+        <mapping class="com.rimbestprice.rimbestprice.models.Ticket"/>
+        <mapping class="com.rimbestprice.rimbestprice.models.CompanyAerienne"/>
+        <!-- Add mappings for other entity classes as needed -->
+
+    </session-factory>
+</hibernate-configuration>
