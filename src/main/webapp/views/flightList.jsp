@@ -24,7 +24,7 @@
         <th>Arrival Date</th>
         <th>Price</th>
         <th>Company Aerienne</th>
-
+        <th>Details</th>
     </tr>
     <%
         List<Flight> flights = (List<Flight>) request.getAttribute("flights");
@@ -39,7 +39,8 @@
         <td><%= sdf.format(flight.getArrivalDate()) %></td>
         <td><%= flight.getPrice() %></td>
         <td><%= flight.getCompanyAerienne().getNom() %></td>
-
+        <td>   <a href="<%= request.getContextPath() %>/flightDetails?flightNumber=<%= flight.getFlightNumber() %>">Details</a>
+        </td>
     </tr>
     <%
         }

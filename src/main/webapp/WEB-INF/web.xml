@@ -15,6 +15,14 @@
         <servlet-name>ReservationServlet</servlet-name>
         <url-pattern>/reservation</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>FlightDetailsServlet</servlet-name>
+        <servlet-class>com.rimbestprice.rimbestprice.servlets.FlightDetailsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FlightDetailsServlet</servlet-name>
+        <url-pattern>/flightDetails</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>FlightListServlet</servlet-name>
