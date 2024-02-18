@@ -3,6 +3,7 @@
 <%@ page import="com.rimbestprice.rimbestprice.models.Ticket"%>
 <%@ page import="com.rimbestprice.rimbestprice.models.Flight"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,6 +49,7 @@
             <th>Price</th>
             <th>Ticket Class</th>
             <th>Number of Tickets Available</th>
+            <th>Date</th>
             <th>Flight</th>
             <th>Actions</th>
         </tr>
@@ -60,14 +62,19 @@
             <td><%= ticket.getPrice() %></td>
             <td><%= ticket.getTicketClass() %></td>
             <td><%= ticket.getNumberOfTicketsAvailable() %></td>
+            <td><%= new SimpleDateFormat("yyyy-MM-dd HH:mm").format(ticket.getCreationTime()) %></td>
             <td><%= ticket.getFlight().getFlightNumber() %></td>
             <td>
-                <button type="button" onclick="populateForm('<%= ticket.getTicketNumber() %>', '<%= ticket.getPrice() %>', '<%= ticket.getTicketClass() %>', '<%= ticket.getNumberOfTicketsAvailable() %>', '<%= ticket.getFlight().getFlightNumber() %>')">Edit</button>
-                <form action="ticket" method="post" style="display: inline;">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="ticketNumber" value="<%= ticket.getTicketNumber() %>">
-                    <input type="submit" value="Delete">
-                </form>
+                <% if (ticket.canModifyTicket()) { %>
+                    <button type="button" onclick="populateForm('<%= ticket.getTicketNumber() %>', '<%= ticket.getPrice() %>', '<%= ticket.getTicketClass() %>', '<%= ticket.getNumberOfTicketsAvailable() %>', '<%= ticket.getFlight().getFlightNumber() %>')">Edit</button>
+                    <form action="ticket" method="post" style="display: inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="ticketNumber" value="<%= ticket.getTicketNumber() %>">
+                        <input type="submit" value="Delete">
+                    </form>
+                <% } else { %>
+                    <span>Cannot modify this ticket.</span>
+                <% } %>
             </td>
         </tr>
         <%
