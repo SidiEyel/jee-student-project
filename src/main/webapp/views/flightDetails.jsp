@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html>
 <head>
     <title>Flight Details</title>
@@ -32,6 +34,26 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+        }
+        .ticket-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .ticket-table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .ticket-table th, .ticket-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ticket-table th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
@@ -68,12 +90,32 @@
         </tr>
     </table>
 
-    <div class="button-container">
-        <form method="post" action="">
-            <!-- You can use hidden input fields to pass additional data if needed -->
-            <input type="hidden" name="flightNumber" value="<%= request.getAttribute("flightNumber") %>">
-            <button class="make-payment-button" type="submit">Make Payment</button>
-        </form>
+    <div class="ticket-container">
+        <table class="ticket-table">
+            <thead>
+                <tr>
+                    <th>Ticket Number</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="ticket" items="${tickets}">
+                    <tr>
+                        <td>${ticket.ticketNumber}</td>
+                        <td>${ticket.price}</td>
+                      
+                        <td>
+                            <form method="get" action="make_payment">
+                                
+                                <input type="hidden" name="ticket" value="${ticket.ticketNumber}">
+                                <button class="make-payment-button" type="submit">Make Payment</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

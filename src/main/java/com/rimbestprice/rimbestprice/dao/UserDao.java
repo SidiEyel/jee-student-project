@@ -2,6 +2,8 @@ package com.rimbestprice.rimbestprice.dao;
 
 import com.rimbestprice.rimbestprice.models.User;
 import jakarta.persistence.Query;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -45,20 +47,20 @@ public class UserDao {
         }
     }
 
-    public User getUserByUsername(String username) {
-        Session session = sessionFactory.openSession();
-        try {
-            String hql = "FROM User WHERE username = :username";
-            Query query = session.createQuery(hql);
-            query.setParameter("username", username);
-            Object result = query.getSingleResult(); // getSingleResult returns an Object
-            return result != null ? (User) result : null; // Cast the result to User
-        } catch (Exception e) {
-            e.printStackTrace(); // Log or handle the exception as needed
-            return null;
-        } finally {
-            session.close();
+   public User getUserByUsername(String username) {
+    try (Session session = sessionFactory.openSession()) {
+        String hql = "FROM User WHERE username = :username";
+        Query query = session.createQuery(hql);
+        query.setParameter("username", username);
+        Object result = query.getSingleResult();
+        if (result != null) {
+            User user = (User) result;
+            Hibernate.initialize(user.getReservations());
+            return user;
         }
+        return null;
+    } catch (Exception e) {
+        return null;
     }
 
-}
+}}

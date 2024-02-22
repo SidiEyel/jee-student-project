@@ -1,22 +1,25 @@
 package com.rimbestprice.rimbestprice.dao;
 
 import com.rimbestprice.rimbestprice.models.Ticket;
+import com.rimbestprice.rimbestprice.models.User;
+import com.rimbestprice.rimbestprice.models.UserReservation;
 
-import org.hibernate.Hibernate;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class TicketDao {
+public class UserReservationDao {
 
     private static final SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 
-    // Utility method to handle session and transaction for write operations
     private void executeInsideTransaction(Consumer<Session> action) {
         Session session = null;
         Transaction transaction = null;
@@ -50,46 +53,43 @@ public class TicketDao {
         }
     }
 
-    public void addTicket(Ticket ticket) {
-        executeInsideTransaction(session -> session.save(ticket));
+    public void addUserReservation(UserReservation reservation) {
+        executeInsideTransaction(session -> session.save(reservation));
     }
 
-    public List<Ticket> getAllTickets() {
+    public List<UserReservation> getAllUserReservations() {
         return executeQuery(session -> {
-            String hql = "FROM Ticket";
-            org.hibernate.query.Query<Ticket> query = session.createQuery(hql, Ticket.class);
+            String hql = "FROM UserReservation";
+            org.hibernate.query.Query<UserReservation> query = session.createQuery(hql, UserReservation.class);
             return query.list();
         });
     }
-    public List<Ticket> getTicketsByFlightNumber(String flightNumber) {
-        return executeQuery(session -> {
-            String hql = "FROM Ticket WHERE flight.flightNumber = :flightNumber";
-            org.hibernate.query.Query<Ticket> query = session.createQuery(hql, Ticket.class);
-            query.setParameter("flightNumber", flightNumber);
-            return query.list();
-        });
-    }
-    public Ticket getTicketByTicketNumber(String ticketNumber) {
-       return executeQuery(session -> {
-        Ticket ticket = session.get(Ticket.class, ticketNumber);
-        if (ticket != null) {
-            // Initialize the reservations collection eagerly
-            Hibernate.initialize(ticket.getReservations());
-        }
-        return ticket;
-    });
+
+    public UserReservation getUserReservationById(Long reservationId) {
+        return executeQuery(session -> session.get(UserReservation.class, reservationId));
     }
 
-    public void updateTicket(Ticket ticket) {
-        executeInsideTransaction(session -> session.update(ticket));
+    public void updateUserReservation(UserReservation reservation) {
+        executeInsideTransaction(session -> session.update(reservation));
     }
 
-    public void deleteTicket(String ticketNumber) {
+    public void deleteUserReservation(Long reservationId) {
         executeInsideTransaction(session -> {
-            Ticket ticket = session.get(Ticket.class, ticketNumber);
-            if (ticket != null) {
-                session.delete(ticket);
+            UserReservation reservation = session.get(UserReservation.class, reservationId);
+            if (reservation != null) {
+                session.delete(reservation);
             }
         });
     }
+  
+    public List<UserReservation> getReservationsByUserId(Long userId) {
+        return executeQuery(session -> {
+            String hql = "FROM UserReservation WHERE user.id = :userId";
+            org.hibernate.query.Query<UserReservation> query = session.createQuery(hql, UserReservation.class);
+            query.setParameter("userId", userId);
+            return query.list();
+        });
+    }
+   
+    
 }

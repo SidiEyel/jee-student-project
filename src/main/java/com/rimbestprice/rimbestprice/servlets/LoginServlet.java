@@ -36,10 +36,18 @@ public class LoginServlet extends HttpServlet {
             // Adding user's admin status to session
             boolean isAdmin = user.isAdmin();
             request.getSession().setAttribute("is_admin", isAdmin);
+      
             // User is authenticated, redirect to another page or dashboard
             //response.sendRedirect("views/home.jsp");
             //Replace "home.jsp" with the target page
-            response.sendRedirect("home");
+            if(isAdmin){
+                response.sendRedirect("home");
+            }
+            else {
+                String contextPath = request.getContextPath();
+                response.sendRedirect(contextPath);
+            }
+            
         } else {
             // Authentication failed, set error message and forward back to the login page
             request.setAttribute("errorMessage", "Invalid username or password.");

@@ -1,5 +1,6 @@
 <%@ page import="com.rimbestprice.rimbestprice.models.Flight" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Comparator" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: random
@@ -28,6 +29,7 @@
     </tr>
     <%
         List<Flight> flights = (List<Flight>) request.getAttribute("flights");
+            Collections.sort(flights, Comparator.comparingDouble(Flight::getPrice));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
         for (Flight flight : flights) {
     %>

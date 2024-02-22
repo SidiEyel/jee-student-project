@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-
+import java.util.List;
 @Entity
 @Table(name = "tickets")
 @Data
@@ -30,7 +30,8 @@ public class Ticket {
     @Column(name = "creation_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
-
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<UserReservation> reservations;
     // Other attributes, getters, setters, and methods
     public boolean canModifyTicket() {
         long timeDifference = new Date().getTime() - this.getCreationTime().getTime();

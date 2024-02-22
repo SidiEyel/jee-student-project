@@ -11,17 +11,33 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClients;
+import org.hibernate.mapping.List;
+
+import com.rimbestprice.rimbestprice.dao.TicketDao;
+import com.rimbestprice.rimbestprice.dao.UserReservationDao;
+import com.rimbestprice.rimbestprice.models.Ticket;
+import com.rimbestprice.rimbestprice.models.User;
+import com.rimbestprice.rimbestprice.models.UserReservation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 
 //@WebServlet(name = "PaymentServlet", urlPatterns = {"/make_payment"})
 public class PaymentServlet extends HttpServlet {
-    @Override
+    protected   TicketDao ticketdao ;
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                request.setAttribute("ticket", request.getParameter("ticket"));
+                System.out.println(request.getParameter("ticket"));
         request.getRequestDispatcher("/views/payment.jsp").forward(request, response);
+    }
+    @Override
+    public void init() throws ServletException {
+        // TODO Auto-generated method stub
+        ticketdao = new TicketDao();
+        super.init();
     }
 
     @Override
@@ -56,9 +72,38 @@ public class PaymentServlet extends HttpServlet {
         while ((line = rd.readLine()) != null) {
             result.append(line);
         }
+        boolean succes=false;
+        if (result.toString().equals("Payment successful")) {
+        Ticket ticket = ticketdao.getTicketByTicketNumber(request.getParameter("ticket"));
+        System.out.println(ticket.toString());
+  
+        // if (result.equals("Payment successful")) {
+            createReservation(request,ticket);
+            System.out.println("Payment successful");
+            ticket.setNumberOfTicketsAvailable(ticket.getNumberOfTicketsAvailable()-1);
+            ticketdao.updateTicket(ticket);
+              succes =true;
+        }
 
         // You can further process the response or forward it to a JSP page
         System.out.println("Response from Payment API: " + result.toString());
-        request.getRequestDispatcher("/views/index.jsp").forward(request, response);
+        User user = (User) request.getSession().getAttribute("user");
+        UserReservationDao reservationdReservation = new UserReservationDao();
+        java.util.List<UserReservation> reservqvtions= reservationdReservation.getReservationsByUserId(user.getId());
+        request.setAttribute("reservations", reservqvtions);
+        request.setAttribute("success", succes);
+        request.getRequestDispatcher("/views/reservations.jsp").forward(request, response);
     }
+
+    private void createReservation(HttpServletRequest request,Ticket ticket) {
+     System.out.println("user");
+    User user = (User) request.getSession().getAttribute("user");
+
+    UserReservation reservation = new UserReservation();
+    reservation.setUser(user);  
+    reservation.setTicket(ticket);
+    reservation.setReservationTime(new Date());  
+    UserReservationDao userReservationDao = new UserReservationDao();
+    userReservationDao.addUserReservation(reservation);
+}
 }

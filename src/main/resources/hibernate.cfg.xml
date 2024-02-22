@@ -27,6 +27,7 @@
         <mapping class="com.rimbestprice.rimbestprice.models.Flight"/>
         <mapping class="com.rimbestprice.rimbestprice.models.Ticket"/>
         <mapping class="com.rimbestprice.rimbestprice.models.CompanyAerienne"/>
+        <mapping class="com.rimbestprice.rimbestprice.models.UserReservation"/>
         <!-- Add mappings for other entity classes as needed -->
 
     </session-factory>
